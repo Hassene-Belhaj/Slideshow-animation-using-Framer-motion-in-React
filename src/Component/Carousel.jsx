@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { BsChevronLeft,BsChevronRight} from 'react-icons/bs'
 import { motion } from 'framer-motion'
@@ -7,21 +7,34 @@ import { motion } from 'framer-motion'
 const Container = styled.div`
 width: 100%;
 height: 100vh;
-padding: 2rem  0;
+padding: 5rem 0 0 0;
 
 `
 const CarouselContainer = styled.div`
 position: relative;
 width : 80% ;
-max-height : 100% ;
+height : 90% ;
 margin: auto;
 border-radius: 25px;
 overflow: hidden;
+background: #000;
 img{
     width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 25px;
 }
+@media screen and (max-width : 768px){
+
+}
+`
+const Opacity = styled.div`
+position:absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+background:rgba(0,0,0,0.2);
+z-index: 9;
 `
 
 const LeftArrowSpan = styled.span`
@@ -37,6 +50,7 @@ display:flex;
 justify-content: center;
 align-items: center;
 cursor: pointer;
+z-index: 10;
 `
 
 const RightArrowSpan = styled.span`
@@ -52,6 +66,8 @@ display:flex;
 justify-content: center;
 align-items: center;
 cursor: pointer;
+z-index: 10;
+
 `
 
 const LeftArrow = styled(BsChevronLeft)`
@@ -65,6 +81,17 @@ fill: #fff;
 
 const Carousel = ({Images}) => {
 const [index,setIndex] = useState(0)
+
+useEffect(()=>{
+
+const timeout = setTimeout(() => {
+    nextSlide()
+}, 3000); 
+    
+return ()=>clearTimeout(timeout)
+
+},[index])
+
 
 
 
@@ -83,6 +110,7 @@ setIndex(curr ? Images.length - 1 : index - 1 )
   return (
      <Container>
         <CarouselContainer>
+            <Opacity></Opacity>
           <LeftArrowSpan onClick={prevSlide}><LeftArrow  size={40}/></LeftArrowSpan>  
            <RightArrowSpan onClick={nextSlide}><RightArrow size={40}/></RightArrowSpan>
         
@@ -92,7 +120,9 @@ setIndex(curr ? Images.length - 1 : index - 1 )
         }}
         animate={{ x: 0 , opacity : 1  }}
         transition={{
-            duration : 0.5
+            duration : 0.5 ,
+            type : "spring" ,
+            bounce : 0.3 
         }}
         initial='initial'
 
