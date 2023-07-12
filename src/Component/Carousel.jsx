@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
-import { BsChevronLeft,BsChevronRight} from 'react-icons/bs'
+import { BsChevronLeft,BsChevronRight, BsDot} from 'react-icons/bs'
 import { motion } from 'framer-motion'
 
 
@@ -61,7 +61,7 @@ transform: translateY(-50%);
 width: 4rem;
 height: 4rem ;
 border-radius: 50%;
-background: rgba(0,0,0,0.5);
+background: rgba(0,0,0,0.4);
 display:flex;
 justify-content: center;
 align-items: center;
@@ -77,21 +77,28 @@ fill: #fff;
 const RightArrow = styled(BsChevronRight)`
 fill: #fff;
 `
-
+const DotDiv = styled.div`
+width: auto;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+`
 
 const Carousel = ({Images}) => {
+
+
 const [index,setIndex] = useState(0)
 
 useEffect(()=>{
 
 const timeout = setTimeout(() => {
     nextSlide()
-}, 3000); 
+}, 4000); 
     
 return ()=>clearTimeout(timeout)
 
 },[index])
-
 
 
 
@@ -116,21 +123,32 @@ setIndex(curr ? Images.length - 1 : index - 1 )
         
         <motion.img  
         variants={{
-        initial : { x: 500 , opacity  : 0.5 },  
+        initial : { x:500 , opacity  : 0 },  
+        visible: { x: 0 , opacity : 1  } ,
+        exit: { x: 0 , opacity : 1  } ,
         }}
-        animate={{ x: 0 , opacity : 1  }}
+        animate='visible'
         transition={{
             duration : 0.5 ,
             type : "spring" ,
             bounce : 0.3 
         }}
         initial='initial'
+        exit='exit'
+        
 
         src={Images[index].img} 
         key={Images[index].img}
         />
       
         </CarouselContainer>
+        <DotDiv>
+       {Images.map((i,index)=>{
+        return (
+                <BsDot size={40} onClick={()=>setIndex(index)} /> 
+                )
+            })}
+            </DotDiv>
      </Container>
     )
 }
